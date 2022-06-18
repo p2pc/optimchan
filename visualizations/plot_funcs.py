@@ -5,7 +5,7 @@ from autograd import grad
 
 def plot_contourf(cost_f, figsize=[10, 10], _show=True):
     fig = plt.figure(figsize=figsize)
-    ax = fig.add_subplot(projection='3d')
+    ax = fig.add_subplot()
     x = np.arange(cost_f.xmin, cost_f.xmax, 0.1)
     y = np.arange(cost_f.ymin, cost_f.ymax, 0.1)
     X, Y = np.meshgrid(x, y)
