@@ -4,8 +4,10 @@ from __future__ import print_function
 
 from .beale import Beale
 from .goldstein_price import GoldsteinPrice
+from .rosenbrock import Rosenbrock
 
 __all__ = [
     'Beale',
     'GoldsteinPrice',
+    'Rosenbrock'
 ]
