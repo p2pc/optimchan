@@ -3,7 +3,9 @@ from __future__ import division
 from __future__ import print_function
 
 from .beale import Beale
+from .goldstein_price import GoldsteinPrice
 
 __all__ = [
     'Beale',
+    'GoldsteinPrice',
 ]
