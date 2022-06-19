@@ -18,6 +18,5 @@ class Beale:
         self.df_dy = grad(self.eval, 1)
 
     def eval(self, x, y):
-        z = np.log(1+(1.5-x+x*y)**2 + (2.25-x+x*y**2)
-                   ** 2 + (2.625-x+x*y**3)**2)/10
+        z = np.log(1+(1.5-x+x*y)**2 + (2.25-x+x*y**2) ** 2 + (2.625-x+x*y**3)**2)/10
         return z
