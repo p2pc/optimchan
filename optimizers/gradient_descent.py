@@ -1,5 +1,16 @@
 from .base import Optimizer
 
+"""
+An intuitive choice for descent direction $\textbf{d}$ is the direction of steepest descent.
+\begin{equation}
+	\textbf{d}^{(k)} = - \frac{\textbf{g}^{(k)}}{||\textbf{g}^{(k)}||} = - \frac{\nabla f(\textbf{x}^{(k)})}{||\nabla f(\textbf{x}^{(k)})||}
+\end{equation}
+
+Optimize the step size at each step
+\begin{equation}
+	\alpha^{(k)} = \argminA_{\alpha} f(\textbf{x}^{(k)} + \alpha^{(k)}\textbf{d}^{(k)})
+\end{equation}
+"""
 
 class GradientDescent(Optimizer):
     def __init__(self, cost_f, lr=0.001, x=None, y=None):
@@ -15,5 +26,5 @@ class GradientDescent(Optimizer):
 
         self.x = self.x - lr*dx
         self.y = self.y - lr*dy
-        
+
         return [self.x, self.y]
