@@ -18,5 +18,5 @@ class Rosenbrock:
         self.df_dy = grad(self.eval, 1)
 
     def eval(self, x, y):
-        z = (100 * (y - x**2)**2 + (1-x)**2)
+        z = np.log(100 * (y - x**2)**2 + (1-x)**2) / 10
         return z
