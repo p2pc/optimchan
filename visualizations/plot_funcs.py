@@ -14,7 +14,7 @@ def plot_contourf(cost_f, figsize=[10, 10], _show=True):
     G = (Gx**2.0+Gy**2.0)**.5  # gradient magnitude
     #print(G)
     N = G/G.max()  # normalize 0..1
-    ax.contourf(X, Y, Z, cmap=plt.cm.get_cmap(plt.cm.afmhot),
+    ax.contourf(X, Y, Z, cmap=plt.cm.get_cmap('gist_heat'),
                 levels=np.linspace(zs.min(), zs.max(), 1000))
     plt.text(cost_f.x_optimum, cost_f.y_optimum, "x", color="b", size=20)
     if _show:
@@ -59,7 +59,7 @@ def plot_cost_function_3d(cost_f, grain=0.01, figsize=[10, 6]):
 
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
-    ax.plot_surface(X, Y, Z, cmap=plt.cm.coolwarm, antialiased=False, shade=False, rstride=5, cstride=1, linewidth=0, alpha=1)
+    ax.plot_surface(X, Y, Z, cmap=plt.cm.get_cmap('gist_heat'), antialiased=False, shade=False, rstride=5, cstride=1, linewidth=0, alpha=1)
     ax.patch.set_facecolor('white')
     ax.view_init(elev=30., azim=70)
     ax.set_xlabel("X")
