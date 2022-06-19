@@ -1,5 +1,15 @@
 from .base import Optimizer
 
+"""
+Gradient descent will take a long time to traverse a nearly flat surface. Allowing momentum to accumulate is one way to speed progress
+\begin{equation}
+	\textbf{v}^{(k+1)} = \beta\textbf{v}^{(k)} - \alpha\textbf{g}^{(k)}
+\end{equation}
+
+\begin{equation}
+	\textbf{x}^{(k+1)} = \textbf{x}^{(k)} + \textbf{v}^{(k+1)}
+\end{equation}
+"""
 
 class GradientDescentMomentum(Optimizer):
     def __init__(self, cost_f, lr=0.001, beta=0.9, x=None, y=None):
