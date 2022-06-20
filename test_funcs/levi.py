@@ -2,6 +2,7 @@ import autograd.numpy as np
 from autograd import grad
 import math
 
+
 class Levi:
     def __init__(self):
         super(Levi, self).__init__()
@@ -18,5 +19,6 @@ class Levi:
         self.df_dy = grad(self.eval, 1)
 
     def eval(self, x, y):
-        z = math.sin(3*math.pi*x)**2 + (x-1)**2*(1+math.sin(3*math.pi*y)**2) + (y-1)**2*(1+math.sin(2*math.pi*y)**2)
+        z = math.sin(3*math.pi*x)**2 + (x-1)**2*(1+math.sin(3*math.pi*y)
+                                                 ** 2) + (y-1)**2*(1+math.sin(2*math.pi*y)**2)
         return z
