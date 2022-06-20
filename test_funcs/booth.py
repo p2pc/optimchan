@@ -2,6 +2,7 @@ import autograd.numpy as np
 from autograd import grad
 import math
 
+
 class Booth:
     def __init__(self):
         super(Booth, self).__init__()
@@ -18,5 +19,5 @@ class Booth:
         self.df_dy = grad(self.eval, 1)
 
     def eval(self, x, y):
-        z = np.log((x + 2*y - 7) ** 2 + (2 * x + y - 5) **2) / 10
+        z = np.log((x + 2*y - 7) ** 2 + (2 * x + y - 5) ** 2) / 10
         return z
