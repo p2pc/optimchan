@@ -2,9 +2,10 @@ import autograd.numpy as np
 from autograd import grad
 import math
 
-class Bukin:
+
+class Matyas:
     def __init__(self):
-        super(Bukin, self).__init__()
+        super(Matyas, self).__init__()
         self.xmin, self.xmax = -10, 10
         self.ymin, self.ymax = -10, 10
         self.y_start, self.x_start = -2.8, 2.4  # Start point
