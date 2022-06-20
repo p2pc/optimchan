@@ -2,6 +2,7 @@ import autograd.numpy as np
 from autograd import grad
 import math
 
+
 class Ackley:
     def __init__(self):
         super(Ackley, self).__init__()
@@ -18,5 +19,6 @@ class Ackley:
         self.df_dy = grad(self.eval, 1)
 
     def eval(self, x, y):
-        z = (-20 * math.exp(-0.2 * math.sqrt(0.5 * (x**2 + y**2))) - math.exp(0.5*math.cos(2*math.pi*x) + math.cos(2*math.pi*y)) + math.e + 20)
+        z = (-20 * math.exp(-0.2 * math.sqrt(0.5 * (x**2 + y**2))) -
+             math.exp(0.5*math.cos(2*math.pi*x) + math.cos(2*math.pi*y)) + math.e + 20)
         return z
