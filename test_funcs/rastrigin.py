@@ -20,5 +20,6 @@ class Rastrigin:
         self.df_dy = grad(self.eval, 1)
 
     def eval(self, x, y):
-        z = (self.A * 2 + (x**2 - self.A * math.cos(2*math.pi*x)) + (y**2 - self.A * math.cos(2*math.pi*y)))
+        z = (self.A * 2 + (x**2 - self.A * math.cos(2*math.pi*x)) +
+             (y**2 - self.A * math.cos(2*math.pi*y)))
         return z
