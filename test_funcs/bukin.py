@@ -2,6 +2,7 @@ import autograd.numpy as np
 from autograd import grad
 import math
 
+
 class Bukin:
     def __init__(self):
         super(Bukin, self).__init__()
@@ -18,5 +19,6 @@ class Bukin:
         self.df_dy = grad(self.eval, 1)
 
     def eval(self, x, y):
-        z = np.log(100 * math.sqrt(abs(y - 0.01 * x**2)) + 0.01 * abs (x + 10)) / 10
+        z = np.log(100 * math.sqrt(abs(y - 0.01 * x**2)) +
+                   0.01 * abs(x + 10)) / 10
         return z
