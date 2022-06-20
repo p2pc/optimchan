@@ -2,6 +2,7 @@ import autograd.numpy as np
 from autograd import grad
 import math
 
+
 class Sphere:
     def __init__(self):
         super(Sphere, self).__init__()
