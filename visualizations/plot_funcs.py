@@ -2,7 +2,11 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_contourf(cost_f, figsize=[10, 10], _show=True):
+from optimizers.utils import run_optimizer
+
+from optimizers import GradientDescent, GradientDescentMomentum, GradientDescentNesterovMomentum, AdaGrad, AdaDelta, RMSProp, Adam
+
+def plot_contourf(cost_f, figsize=[10, 10], _show=True, is_save=True):
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot()
     x = np.arange(cost_f.xmin, cost_f.xmax, 0.1)
@@ -14,9 +18,12 @@ def plot_contourf(cost_f, figsize=[10, 10], _show=True):
     G = (Gx**2.0+Gy**2.0)**.5  # gradient magnitude
     #print(G)
     N = G/G.max()  # normalize 0..1
-    ax.contourf(X, Y, Z, cmap=plt.cm.get_cmap('gist_heat'),
+    ax.contourf(X, Y, Z, cmap=plt.cm.get_cmap('hsv'),
                 levels=np.linspace(zs.min(), zs.max(), 1000))
     plt.text(cost_f.x_optimum, cost_f.y_optimum, "x", color="b", size=20)
+    if is_save:
+        # plt.savefig('destination_contourf.png', format='png', dpi=500)
+        plt.savefig('destination_contourf.png', format='png')
     if _show:
         plt.show()
     return fig, ax
@@ -47,7 +54,7 @@ def plot_trajectories(trajectories_dict, cost_f, figsize=[10, 10], filepath="tes
     animation.save(filepath, dpi=80, writer="imagemagick")
 
 
-def plot_cost_function_3d(cost_f, grain=0.01, figsize=[10, 6]):
+def plot_cost_function_3d(cost_f, grain=0.01, figsize=[10, 6], is_save=True):
     # Controls the X region covered by the mesh grid
     x_grid = np.arange(cost_f.xmin, cost_f.xmax, grain)
     # Controls the Y region covered by the mesh grid
@@ -59,73 +66,80 @@ def plot_cost_function_3d(cost_f, grain=0.01, figsize=[10, 6]):
 
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
-    ax.plot_surface(X, Y, Z, cmap=plt.cm.get_cmap('gist_heat'), antialiased=False, shade=False, rstride=5, cstride=1, linewidth=0, alpha=1)
+    ax.plot_surface(X, Y, Z, cmap=plt.cm.get_cmap('hsv'), antialiased=False, shade=False, rstride=5, cstride=1, linewidth=0, alpha=1)
     ax.patch.set_facecolor('white')
     ax.view_init(elev=30., azim=70)
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
     ax.xaxis.labelpad = ax.yaxis.labelpad = ax.zaxis.labelpad = 15
+    if is_save:
+        plt.savefig('destination_cost_function_3d.png', format='png')
     plt.show()
+
 
 
 def plot_evolution_charts(cost_f, errors, distance, xs, ys):
     plt.figure(figsize=[18, 6])
-    plt.plot(errors)
+    plt.plot(errors, linewidth=3.0)
     #plt.title("Error (Z axis) evolution over time. Minimum error obtained in {0} iterations: {1}".format(len(errors), min(errors)))
     plt.title("Độ lỗi (Trục $Z$) theo thời gian. Độ lỗi cực tiểu thu được trong {0} lần lặp: {1}".format(len(errors), min(errors)))
     plt.xlabel("lần lặp")
     plt.ylabel("độ lỗi")
     plt.grid()
+    plt.savefig('evolution_charts_01.png', format='png')
     plt.show()
 
     plt.figure(figsize=[18, 6])
-    plt.semilogy(np.abs(np.array(errors) - cost_f.z_optimum))
+    plt.semilogy(np.abs(np.array(errors) - cost_f.z_optimum), linewidth=3.0)
     #plt.title("Log-error (Z axis) evolution over time. Minimum error obtained in {0} iterations: {1}".format(len(errors), min(errors)))
     plt.title("Log của độ lỗi (Trục $Z$) theo thời gian. Độ lỗi cực tiểu thu được trong {0} lần lặp: {1}".format(len(errors), min(errors)))
     plt.xlabel("lần lặp")
     plt.ylabel("log(độ lỗi)")
     plt.grid()
+    plt.savefig('evolution_charts_02.png', format='png')
     plt.show()
 
     plt.figure(figsize=[18, 6])
-    plt.plot(distance)
+    plt.plot(distance, linewidth=3.0)
     plt.ylim([0, max(distance)])
     #plt.title("Distance to minimum evolution over time. Minimum distance obtained in {0} iterations: {1}".format(len(errors), min(errors)))
     plt.title("Khoảng cách đến vị trí cực tiểu theo thời gian. Khoảng cách cực tiểu thu được trong {0} lần lặp: {1}".format(len(errors), min(errors)))
     plt.xlabel("lần lặp")
     plt.ylabel("khoảng cách")
     plt.grid()
+    plt.savefig('evolution_charts_03.png', format='png')
     plt.show()
 
 
 def plot_cinematics_charts(xs, ys):
     plt.figure(figsize=[18, 6])
     plt.subplot(131)
-    plt.plot(xs)
+    plt.plot(xs, linewidth=3.0)
     plt.title("Đánh giá tham số $X$")
     plt.xlabel("lần lặp")
     plt.ylabel("$x$")
     plt.grid()
     plt.subplot(132)
-    plt.plot(ys)
+    plt.plot(ys, linewidth=3.0)
     plt.title("Đánh giá tham số $Y$")
     plt.xlabel("lần lặp")
     plt.ylabel("$y$")
     plt.grid()
     plt.subplot(133)
-    plt.plot(xs, ys)
+    plt.plot(xs, ys, linewidth=3.0)
     plt.title("Đánh giá $x/ y$")
     plt.xlabel("$x$")
     plt.ylabel("$y$")
     plt.grid()
+    plt.savefig('cinematics_charts_01.png', format='png')
     plt.show()
 
     vel_xs = np.diff(xs)
     vel_ys = np.diff(ys)
     plt.figure(figsize=[18, 6])
     plt.subplot(131)
-    plt.plot(np.abs(vel_xs))
+    plt.plot(np.abs(vel_xs), linewidth=3.0)
     plt.title("Tham số vận tốc $X$ (Động lượng - momentum; $v_x$)")
     plt.xlabel("lần lặp")
     plt.ylabel("$v_x$")
@@ -133,7 +147,7 @@ def plot_cinematics_charts(xs, ys):
     plt.grid()
 
     plt.subplot(132)
-    plt.plot(np.abs(vel_ys))
+    plt.plot(np.abs(vel_ys), linewidth=3.0)
     plt.title("Tham số vận tốc $Y$ (Động lượng - momentum; $v_y$)")
     plt.xlabel("lần lặp")
     plt.ylabel("$v_y$")
@@ -141,10 +155,73 @@ def plot_cinematics_charts(xs, ys):
     plt.grid()
 
     plt.subplot(133)
-    plt.plot(np.sqrt(np.array(vel_xs)**2 + np.array(vel_ys)**2))
+    plt.plot(np.sqrt(np.array(vel_xs)**2 + np.array(vel_ys)**2), linewidth=3.0)
     plt.title("Vận tốc tuyệt đối - Absolute velocity ($\sqrt{v_x^2 + v_y^2}$)")
     plt.xlabel("lần lặp")
     plt.ylabel("$v$")
     plt.ylim(0, 1.05*max(np.sqrt(np.array(vel_xs)**2 + np.array(vel_ys)**2)))
     plt.grid()
+    plt.savefig('cinematics_charts_02.png', format='png')
     plt.show()
+
+
+def global_compare(cost_fnc, iterations, learning_rate, figsize=[18, 6]):
+    errors_sgd, distance_sgd, _, _ = run_optimizer(opt=GradientDescent(cost_f=cost_fnc, lr=learning_rate), cost_f=cost_fnc, iterations=iterations)
+    errors_momentum, distance_momentum, _, _ = run_optimizer(opt=GradientDescentMomentum(cost_f=cost_fnc, lr=learning_rate), cost_f=cost_fnc, iterations=iterations)
+    errors_nesterov, distance_nesterov, _, _ = run_optimizer(opt=GradientDescentNesterovMomentum(cost_f=cost_fnc, lr=learning_rate), cost_f=cost_fnc, iterations=iterations)
+    errors_adagrad, distance_adagrad, _, _ = run_optimizer(opt=AdaGrad(cost_f=cost_fnc, lr=learning_rate), cost_f=cost_fnc, iterations=iterations)
+    errors_adadelta, distance_adadelta, _, _ = run_optimizer(opt=AdaDelta(cost_f=cost_fnc, lr=learning_rate), cost_f=cost_fnc, iterations=iterations)
+    errors_rmsprop, distance_rmsprop, _, _ = run_optimizer(opt=RMSProp(cost_f=cost_fnc, lr=learning_rate), cost_f=cost_fnc, iterations=iterations)
+    errors_adam, distance_adam, _, _ = run_optimizer(opt=Adam(cost_f=cost_fnc, lr=learning_rate), cost_f=cost_fnc, iterations=iterations)
+    plt.figure(figsize=figsize)
+    plt.plot(errors_sgd, color="b")
+    plt.plot(errors_momentum, color="orange")
+    plt.plot(errors_nesterov, color="green")
+    plt.plot(errors_adagrad, color="tomato")
+    plt.plot(errors_rmsprop, color="purple")
+    plt.plot(errors_adadelta, color="turquoise")
+    plt.plot(errors_adam, color="k")
+    plt.title("So sánh độ lỗi giữa các optimizers")
+    plt.ylabel("độ lỗi")
+    plt.xlabel("thời gian")
+    plt.legend(labels=["GradientDescent", "GradientDescentMomentum", "GradientDescentNesterovMomentum", "AdaGrad", "RMSProp", "AdaDelta", "Adam"])
+    plt.xlim([0,iterations])
+    plt.grid()
+    plt.savefig('global_compare_01.png', format='png')
+    plt.show()
+
+    plt.figure(figsize=figsize)
+    plt.semilogy(errors_sgd, color="b")
+    plt.semilogy(errors_momentum, color="orange")
+    plt.semilogy(errors_nesterov, color="green")
+    plt.semilogy(errors_adagrad, color="tomato")
+    plt.semilogy(errors_rmsprop, color="purple")
+    plt.semilogy(errors_adadelta, color="turquoise")
+    plt.semilogy(errors_adam, color="k")
+    plt.title("So sánh độ lỗi giữa các optimizers (log-scale trục y)")
+    plt.ylabel("độ lỗi")
+    plt.xlabel("thời gian")
+    plt.legend(labels=["GradientDescent", "GradientDescentMomentum", "GradientDescentNesterovMomentum", "AdaGrad", "RMSProp", "AdaDelta", "Adam"])
+    plt.xlim([0,iterations])
+    plt.grid()
+    plt.savefig('global_compare_02.png', format='png')
+    plt.show()
+
+    plt.figure(figsize=figsize)
+    plt.plot(distance_sgd, color="b")
+    plt.plot(distance_momentum, color="orange")
+    plt.plot(distance_nesterov, color="green")
+    plt.plot(distance_adagrad, color="tomato")
+    plt.plot(distance_rmsprop, color="purple")
+    plt.plot(distance_adadelta, color="turquoise")
+    plt.plot(distance_adam, color="k")
+    plt.title("So sánh khoảng cách đến điểm cực tiểu toàn cục giữa các optimizers với nhau")
+    plt.ylabel("độ lỗi")
+    plt.xlabel("thời gian")
+    plt.legend(labels=["GradientDescent", "GradientDescentMomentum", "GradientDescentNesterovMomentum", "AdaGrad", "RMSProp", "AdaDelta", "Adam"])
+    plt.xlim([0,iterations])
+    plt.grid()
+    plt.savefig('global_compare_03.png', format='png')
+    plt.show()
+
+

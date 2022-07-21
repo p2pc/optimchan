@@ -9,6 +9,7 @@ from .gradient_descent_nesterov_momentum import GradientDescentNesterovMomentum
 from .adagrad import AdaGrad
 from .rmsprop import RMSProp
 from .adadelta import AdaDelta
+from .adam import Adam
 from .adamax import AdaMax
 from .nesterov_adam import NesterovAdam
 
@@ -22,4 +23,5 @@ __all__ = [
     'AdaDelta',
     'AdaMax',
     'NesterovAdam',
+    'Adam'
 ]

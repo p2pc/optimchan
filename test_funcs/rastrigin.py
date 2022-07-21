@@ -9,7 +9,7 @@ class Rastrigin:
         self.A = 10
         self.xmin, self.xmax = -5, 5
         self.ymin, self.ymax = -5, 5
-        self.y_start, self.x_start = -2.8, 2.4  # Start point
+        self.y_start, self.x_start = -4.8, 4.4  # Start point
         self.x_optimum, self.y_optimum, self.z_optimum = 0, 0, 0  # Global optimum
         self._compute_derivatives()
 
